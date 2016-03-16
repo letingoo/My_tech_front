@@ -3,6 +3,7 @@ package letingoo.net.interfaces;
 import java.util.List;
 
 import letingoo.entities.Article;
+import letingoo.entities.NewsModule;
 import letingoo.interfaces.DataListener;
 
 /**
@@ -15,7 +16,7 @@ public interface ArticleAPI {
      *根据分类通过网络获取文章列表
      * @param category 分类的标识
      */
-    public void fetchArticles(int category, DataListener<List<Article>> listener);
+    public void fetchArticles(String category, DataListener<List<NewsModule>> listener);
 
 
     /**
@@ -23,7 +24,7 @@ public interface ArticleAPI {
      * @param category
      * @param listener
      */
-    public void loadMore(int category, DataListener<List<Article>> listener);
+    public void loadMore(String category, DataListener<List<NewsModule>> listener);
 
 
     /**

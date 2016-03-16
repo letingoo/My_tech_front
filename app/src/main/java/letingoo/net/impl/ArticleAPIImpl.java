@@ -3,13 +3,16 @@ package letingoo.net.impl;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
 import letingoo.entities.Article;
+import letingoo.entities.NewsModule;
 import letingoo.interfaces.DataListener;
 import letingoo.net.handlers.ArticlesHandler;
 import letingoo.net.handlers.RespHandler;
@@ -25,26 +28,26 @@ public class ArticleAPIImpl implements ArticleAPI {
     /**
      * 当前页码
      */
-    private int mPage = 1;
+    private int mPage = 0;
 
     private static final int INITIAL_PAGE = 1;
 
     // 写的不好
-    private RespHandler<List<Article>, JSONArray> mRespHandler;
+    private RespHandler<List<NewsModule>, JSONObject> mRespHandler;
 
     public ArticleAPIImpl() {
         mRespHandler = new ArticlesHandler();
     }
 
     @Override
-    public void fetchArticles(int category, DataListener<List<Article>> listener) {
+    public void fetchArticles(String category, DataListener<List<NewsModule>> listener) {
 
         performRequest(INITIAL_PAGE, category, listener);
     }
 
 
     @Override
-    public void loadMore(int category, DataListener<List<Article>> listener) {
+    public void loadMore(String category, DataListener<List<NewsModule>> listener) {
 
         performRequest(++mPage, category, listener);
     }
@@ -55,14 +58,15 @@ public class ArticleAPIImpl implements ArticleAPI {
      * @param category
      */
 
-    private void performRequest(final int page, final int category, final DataListener<List<Article>> dataListener) {
+    private void performRequest(final int page, final String category, final DataListener<List<NewsModule>> dataListener) {
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 URLHelper.produceFetchArticlesURL(page, category),
-                new Response.Listener<JSONArray>() {
+                null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray jsonArray) {
-                        dataListener.onComplete( mRespHandler.parse(jsonArray) );
+                    public void onResponse(JSONObject jsonObject) {
+                        dataListener.onComplete( mRespHandler.parse(jsonObject) );
                     }
                 },
                 new Response.ErrorListener() {
@@ -73,7 +77,7 @@ public class ArticleAPIImpl implements ArticleAPI {
                 }
         );
 
-        RequestQueueMgr.getRequestQueue().add(jsonArrayRequest);
+        RequestQueueMgr.getRequestQueue().add(jsonObjectRequest);
 
     }
 

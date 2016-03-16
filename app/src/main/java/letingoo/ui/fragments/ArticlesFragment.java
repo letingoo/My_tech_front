@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import letingoo.entities.Article;
+import letingoo.entities.NewsModule;
 import letingoo.my_tech_front.R;
 import letingoo.presenter.ArticlePresenter;
 import letingoo.ui.DetailActivity;
@@ -24,6 +25,7 @@ import letingoo.ui.adapters.ArticlesAdapter;
 import letingoo.ui.interfaces.ArticlesViewInterface;
 import letingoo.ui.interfaces.BaseViewInterface;
 import letingoo.ui.listener.OnItemClickListener;
+import letingoo.util.NewsCategory;
 
 /**
  * Created by barcelona on 2015/9/26.
@@ -100,7 +102,7 @@ public class ArticlesFragment extends Fragment implements ArticlesViewInterface 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.fetchArticles(Article.ALL);
+                presenter.fetchArticles(NewsCategory.TOP_ID);
             }
         });
 
@@ -112,9 +114,9 @@ public class ArticlesFragment extends Fragment implements ArticlesViewInterface 
 
         recyclerView.setLayoutManager( new LinearLayoutManager(getActivity()) );
         articlesAdapter = new ArticlesAdapter( presenter.getArticles() );
-        articlesAdapter.setOnClickListener(new OnItemClickListener<Article>() {
+        articlesAdapter.setOnClickListener(new OnItemClickListener<NewsModule>() {
             @Override
-            public void onClick(Article article) {
+            public void onClick(NewsModule article) {
                 if ( article != null )
                     loadArticle(article);
             }
@@ -143,7 +145,7 @@ public class ArticlesFragment extends Fragment implements ArticlesViewInterface 
                     last_dy = dy;
                 super.onScrolled(recyclerView, dx, dy);
 
-                presenter.loadMoreArticles(Article.ALL);
+                presenter.loadMoreArticles(NewsCategory.TOP_ID);
 
             }
         });
@@ -153,11 +155,11 @@ public class ArticlesFragment extends Fragment implements ArticlesViewInterface 
 
     private void fetchData() {
 
-        presenter.fetchArticles(Article.ALL);
+        presenter.fetchArticles(NewsCategory.TOP_ID );
     }
 
     @Override
-    public void showData(List<Article> articles) {
+    public void showData(List<NewsModule> articles) {
 
         articlesAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
@@ -166,7 +168,7 @@ public class ArticlesFragment extends Fragment implements ArticlesViewInterface 
 
 
     @Override
-    public void addData(List<Article> moreArticles) {
+    public void addData(List<NewsModule> moreArticles) {
 
         articlesAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
@@ -174,11 +176,11 @@ public class ArticlesFragment extends Fragment implements ArticlesViewInterface 
 
 
 
-    private void loadArticle(Article article) {
+    private void loadArticle(NewsModule article) {
 
         Intent intent = new Intent( getActivity(), DetailActivity.class );
-        intent.putExtra( "post_id", article.getPost_id() );
-        intent.putExtra( "title", article.getTitle() );
+        //intent.putExtra( "post_id", article.getPost_id() );
+        //intent.putExtra( "title", article.getTitle() );
         startActivity(intent);
     }
 }

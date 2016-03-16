@@ -5,24 +5,26 @@ package letingoo.util;
  */
 public class URLHelper {
 
-    private static final String TARGET_URL = "http://www.devtf.cn/api/v1/?type=articles";
-
-    private static final String PAGE = "&page=";
-
-    private static final String COUNT = "&count=";
-
-    private static final String CATEGORY = "&category=";
-
-    private static final int DEFAULT_COUNT = 20;
 
 
-    private static final String GET_ARTICLE_CONTENT_URL = "http://www.devtf.cn/api/v1/?type=article&post_id=";
 
 
-    public static String produceFetchArticlesURL(final int page, final int category) {
 
+    public static final String host = "http://c.m.163.com/";
+    public static final String endUrl = "-20.html";
+
+    public static final String TOP_URL = host + "nc/article/headline/";
+
+
+
+
+
+
+    public static String produceFetchArticlesURL(final int page, final String category) {
+
+        int index = page * 20;
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(TARGET_URL).append(PAGE).append(page).append(COUNT).append(DEFAULT_COUNT).append(CATEGORY).append(category);
+        stringBuilder.append(TOP_URL).append(category).append('/').append(index).append(endUrl);
 
         return stringBuilder.toString();
     }
@@ -31,7 +33,8 @@ public class URLHelper {
 
     public static String produceFetchArticleContentURL( String post_id ) {
 
-        return GET_ARTICLE_CONTENT_URL + post_id;
+        //return GET_ARTICLE_CONTENT_URL + post_id;
+        return null;
     }
 
 }

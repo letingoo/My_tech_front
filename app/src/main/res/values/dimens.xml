@@ -9,5 +9,8 @@
     <dimen name="text_large_body">18sp</dimen>
     <dimen name="text_body">16sp</dimen>
     <dimen name="text_small_body">14sp</dimen>
+    <dimen name="right_image_width">100.0dip</dimen>
+    <dimen name="right_image_height">120.0dip</dimen>
 
+    <dimen name="card_view_height">120dp</dimen>
 </resources>

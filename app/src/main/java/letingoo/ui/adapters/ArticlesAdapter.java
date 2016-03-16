@@ -6,44 +6,56 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 
 import org.w3c.dom.Text;
 
 import java.util.List;
 
 import letingoo.entities.Article;
+import letingoo.entities.NewsModule;
 import letingoo.my_tech_front.R;
+import letingoo.net.mgr.RequestQueueMgr;
 import letingoo.ui.DetailActivity;
 import letingoo.ui.listener.OnItemClickListener;
+import letingoo.util.LruBitmapCache;
 
 /**
  * Created by barcelona on 2015/9/27.
  */
 public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ArticleHolder> {
 
+    // Volley框架用于加载图片的
+    private ImageLoader imageLoader;
+
 
     /*
     文章列表
      */
-    private List<Article> articles;
+    private List<NewsModule> news_list;
 
     private LayoutInflater inflater;
 
 
-    private OnItemClickListener<Article> mClickListener;
+    private OnItemClickListener<NewsModule> mClickListener;
 
 
-    public void setOnClickListener(OnItemClickListener<Article> onClickListener) {
+    public void setOnClickListener(OnItemClickListener<NewsModule> onClickListener) {
         this.mClickListener = onClickListener;
-
-
     }
 
-    public ArticlesAdapter (List<Article> articles) {
+    public ArticlesAdapter (List<NewsModule> news_list) {
 
+        this.news_list = news_list;
 
-        this.articles = articles;
+        imageLoader = new ImageLoader(RequestQueueMgr.getRequestQueue(), new LruBitmapCache());
+
     }
 
 
@@ -59,18 +71,18 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
     public void onBindViewHolder(ArticleHolder holder, int position) {
 
         bindArticleToItemView(holder, position);
-        setupItemClickListener( holder, articles.get(position) );
+        setupItemClickListener(holder, news_list.get(position));
     }
 
 
-    private void setupItemClickListener(ArticleHolder holder, final Article article) {
+    private void setupItemClickListener(ArticleHolder holder, final NewsModule news) {
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if ( mClickListener != null )
-                    mClickListener.onClick(article);
+                    mClickListener.onClick(news);
             }
         });
     }
@@ -78,18 +90,20 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
 
     @Override
     public int getItemCount() {
-        return (articles == null) ? 0 : articles.size();
+        return (news_list == null) ? 0 : news_list.size();
     }
 
 
 
     private void bindArticleToItemView(ArticleHolder holder, int position) {
 
-        Article article = articles.get(position);
+        NewsModule news = news_list.get(position);
 
-        holder.textView_title.setText( article.getTitle() );
-        holder.textView_date.setText( article.getDate() );
-        holder.textView_author.setText(article.getAuthor());
+        // 图片怎么弄还在研究
+        holder.textView_title.setText(news.getTitle());
+        holder.textView_digest.setText(news.getDigest());
+
+        holder.image.setImageUrl( news.getImgsrc(), imageLoader );
 
     }
 
@@ -100,15 +114,15 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
     public static class ArticleHolder extends RecyclerView.ViewHolder {
 
         private TextView textView_title;
-        private TextView textView_author;
-        private TextView textView_date;
+        private TextView textView_digest;
+        private NetworkImageView image;
 
         public ArticleHolder(View view) {
             super(view);
 
-            textView_title = (TextView) view.findViewById(R.id.text_view_title);
-            textView_author = (TextView) view.findViewById(R.id.text_view_author);
-            textView_date = (TextView) view.findViewById(R.id.text_view_date);
+            textView_title = (TextView) view.findViewById(R.id.title_text);
+            textView_digest = (TextView) view.findViewById(R.id.digest_text);
+            image = (NetworkImageView)view.findViewById(R.id.image);
         }
     }
 

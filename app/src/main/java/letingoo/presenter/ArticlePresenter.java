@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import letingoo.entities.Article;
+import letingoo.entities.NewsModule;
 import letingoo.interfaces.DataListener;
 import letingoo.net.impl.ArticleAPIImpl;
 import letingoo.net.interfaces.ArticleAPI;
@@ -30,13 +31,25 @@ public class ArticlePresenter {
     /**
      * Articles的列表
      */
-    private List<Article> articles;
+    private List<NewsModule> articles;
 
+
+
+    // 新闻类型
+    private String newsCategory;
+
+    public void setNewsCategory(String newsCategory) {
+        this.newsCategory = newsCategory;
+    }
+
+    public String getNewsCategory() {
+        return newsCategory;
+    }
 
     private boolean noMoreArticles = false;
 
 
-    public List<Article> getArticles() {
+    public List<NewsModule> getArticles() {
         return articles;
     }
 
@@ -45,17 +58,17 @@ public class ArticlePresenter {
         this.view = view;
         articleAPI = new ArticleAPIImpl();
 
-        articles = new ArrayList<Article>();
+        articles = new ArrayList<NewsModule>();
 
     }
 
 
 
-    public void fetchArticles(int category) {
+    public void fetchArticles(String category) {
 
-        articleAPI.fetchArticles(category, new DataListener<List<Article>>() {
+        articleAPI.fetchArticles(category, new DataListener<List<NewsModule>>() {
             @Override
-            public void onComplete(List<Article> result) {
+            public void onComplete(List<NewsModule> result) {
                 handleInformation(result);
             }
         });
@@ -63,14 +76,14 @@ public class ArticlePresenter {
 
 
 
-    public void loadMoreArticles(int category) {
+    public void loadMoreArticles(String category) {
 
         if ( noMoreArticles )
             return;
 
-        articleAPI.loadMore(category, new DataListener<List<Article>>() {
+        articleAPI.loadMore(category, new DataListener<List<NewsModule>>() {
             @Override
-            public void onComplete(List<Article> result) {
+            public void onComplete(List<NewsModule> result) {
                 addMoreArticles(result);
 
                 if (result.size() == 0)
@@ -83,7 +96,7 @@ public class ArticlePresenter {
 
 
 
-    private void handleInformation(List<Article> result) {
+    private void handleInformation(List<NewsModule> result) {
 
         articles.removeAll(result);
         articles.addAll(result);
@@ -92,7 +105,7 @@ public class ArticlePresenter {
 
 
 
-    private void addMoreArticles(List<Article> result) {
+    private void addMoreArticles(List<NewsModule> result) {
 
         articles.addAll(result);
         view.addData(articles);
