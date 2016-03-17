@@ -179,8 +179,8 @@ public class ArticlesFragment extends Fragment implements ArticlesViewInterface 
     private void loadArticle(NewsModule article) {
 
         Intent intent = new Intent( getActivity(), DetailActivity.class );
-        //intent.putExtra( "post_id", article.getPost_id() );
-        //intent.putExtra( "title", article.getTitle() );
+        intent.putExtra( "news_url", article.getUrl() );
+
         startActivity(intent);
     }
 }

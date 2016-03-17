@@ -13,4 +13,6 @@
     <dimen name="right_image_height">120.0dip</dimen>
 
     <dimen name="card_view_height">120dp</dimen>
+
+    <dimen name="padding">10dp</dimen>
 </resources>

@@ -28,8 +28,7 @@ public class DetailActivity extends AppCompatActivity implements ArticleDetailIn
 
     private ArticleDetailPresenter presenter;
 
-    private String postId;
-    private String targetURL;
+    private String newsUrl;
     private String title;
 
 
@@ -52,8 +51,8 @@ public class DetailActivity extends AppCompatActivity implements ArticleDetailIn
         initView();
         initArticleURL();
 
-        presenter.fetchArticleContent(postId);
-
+        //presenter.fetchArticleContent(postId);
+        webView.loadUrl(newsUrl);
     }
 
 
@@ -91,7 +90,7 @@ public class DetailActivity extends AppCompatActivity implements ArticleDetailIn
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            postId = bundle.getString("post_id");
+            newsUrl = bundle.getString("news_url");
             title = bundle.getString("title");
 
         }
